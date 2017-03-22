@@ -1,74 +1,80 @@
-var windowHeight = window.innerHeight
-  , windowWidth = window.innerWidth;
-var centerX = windowWidth / 2
-  , centerY = windowHeight / 2;
-var dx, dy, dmouse, mmX, mmY;
+var windowHeight = window.innerHeight,
+  windowWidth = window.innerWidth;
+
+var centerX = windowWidth / 2,
+  centerY = windowHeight / 2;
+
+var dx, dy, dmouse, mmX, mmY, mouseDown, mouseDrag;
+
+var objects = [],
+  numObjects = 100;
+
+var spriteLocations = [];
+var sprites = [];
+
+
+//System Functions
+function preload() { // preload() runs once
+  // img = loadImage('assets/laDefense.jpg');
+}
 
 function setup() {
   var canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent('p5-holder');
-}
-
-function draw() {
-  resetMatrix();
-  updateMouseVars();
-  thing1();
-  thing2();
-  thing3();
-}
-
-function mouseClicked() {
-  //clear();
+  populateObjects();
+  //frameRate(10);
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+function mouseClicked() {
+  //clear();
+  //objects = [];
+}
+
+//Helper Functions
 function updateMouseVars() {
   dx = mouseX - pmouseX;
   dy = mouseY - pmouseY;
   mmX = mouseX - width / 2;
   mmY = mouseY - height / 2;
   dmouse = int(dist(mouseX, mouseY, pmouseX, pmouseY));
-  if (mouseIsPressed) {
-    fill(0);
-  }
-  else {
-    fill(255);
+}
+
+function populateObjects() {
+  var tempObj;
+  for (var i = 0; i < numObjects; i++) {
+    tempObj = new Jitter();
+    objects.push(tempObj);
   }
 }
 
-function thing1() {
-  if (dmouse != 0) {
-    ellipse(mouseX, mouseY, dmouse, dmouse);
+function updateObjects(objects) {
+  var gravity;
+  if (mouseIsPressed) {
+    gravity = createVector(0, -9.8);
+  } else {
+    gravity = createVector(0, 9.8);
+  }
+
+  for (var i = 0; i < objects.length; i++) {
+    objects[i].update();
+    objects[i].applyForces(gravity);
+    objects[i].display();
+
+    objects[i].checkEdges();
   }
 }
-/*
- *  Draws a circle out of circles.
- */
-function thing2() {
-  var rad, bradius = dmouse, sradius = 25;
-  push();
-  translate(windowWidth / 2, windowHeight / 2);
-  for (var i = 0; i < 360; i++) {
-    rad = radians(i);
-    ellipse(sin(rad) * bradius + mmX, cos(rad) * bradius + mmY, sradius + dmouse);
-  }
-  pop();
-}
-/*
- *  Draws a certain number of circles , in a circle pattern.
- */
-function thing3() {
-  var angleStep, numCircles = 6, theta, Px, Py, r = 25;
-  angleStep = 360.0 / numCircles;
-  push();
-  for (var i = 0; i < numCircles; i++) {
-    theta = i * angleStep + mouseX;
-    Px = centerX + (dmouse * cos(radians(theta)));
-    Py = centerY + (dmouse * sin(radians(theta)));
-    ellipse(Px, Py, sqrt(dmouse));
-  }
-  pop();
+
+//Animation Loop
+function draw() {
+  clear();
+  updateMouseVars();
+  thing1();
+  thing2();
+  //thing3();
+  updateObjects(objects);
+
 }
