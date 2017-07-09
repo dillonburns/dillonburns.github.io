@@ -70,7 +70,7 @@ function updateObjects(objects) {
 
 //Animation Loop
 function draw() {
-  clear();
+  //clear();
   updateMouseVars();
   thing1();
   thing2();
