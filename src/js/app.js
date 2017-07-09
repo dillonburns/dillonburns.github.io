@@ -74,7 +74,6 @@ function draw() {
   updateMouseVars();
   thing1();
   thing2();
-  //thing3();
+  thing3();
   updateObjects(objects);
-
 }

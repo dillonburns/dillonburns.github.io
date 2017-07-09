@@ -7,9 +7,6 @@ function thing1() {
   }
 }
 
-/*
- *  Draws a circle out of circles.
- */
 function thing2() {
   var rad,
     bradius = 250,
@@ -23,9 +20,6 @@ function thing2() {
   pop();
 }
 
-/*
- *  Draws a certain number of circles , in a circle pattern.
- */
 function thing3() {
   var angleStep,
     numCircles = 24,
